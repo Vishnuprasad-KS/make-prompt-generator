@@ -1,7 +1,7 @@
 import { FormData } from '../types';
 
 // Replace with your actual API endpoint
-const API_URL = import.meta.env.WEBHOOK_URL;
+const API_URL = import.meta.env.VITE_WEBHOOK_URL;
 
 export const submitFormData = async (formData: FormData): Promise<Response> => {
   try {
