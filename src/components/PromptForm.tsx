@@ -97,7 +97,7 @@ const PromptForm: React.FC = () => {
         onSubmit={handleSubmit} 
         className="bg-white shadow-xl rounded-xl p-6 md:p-8 animate-fadeIn"
       >
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">AI Prompt Generator</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">AI Website Generator</h2>
         
         <FormField
           label="Prompt"
