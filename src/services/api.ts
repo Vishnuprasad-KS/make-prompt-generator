@@ -2,7 +2,7 @@ import { FormData, Website, Collection } from '../types';
 import { WebflowClient } from 'webflow-api';
 
 const API_URL = import.meta.env.VITE_WEBHOOK_URL;
-const webflow = new WebflowClient({ token: import.meta.env.VITE_WEBFLOW_API_KEY });
+const webflow = new WebflowClient({ accessToken: import.meta.env.VITE_WEBFLOW_API_KEY });
 
 export const submitFormData = async (formData: FormData): Promise<Response> => {
   try {
@@ -27,10 +27,11 @@ export const submitFormData = async (formData: FormData): Promise<Response> => {
 
 export const fetchWebsites = async (): Promise<Website[]> => {
   try {
-    const sites = await webflow.sites();
-    return sites.map(site => ({
-      id: site._id,
-      name: site.name
+    const sites = await webflow.sites.list();
+    console.log(sites)
+    return sites.sites!.map(site => ({
+      id: site.id,
+      name: site.displayName
     }));
   } catch (error) {
     console.error('Error fetching websites:', error);
@@ -40,10 +41,10 @@ export const fetchWebsites = async (): Promise<Website[]> => {
 
 export const fetchCollections = async (websiteId: string): Promise<Collection[]> => {
   try {
-    const collections = await webflow.collections({ siteId: websiteId });
-    return collections.map(collection => ({
-      id: collection._id,
-      name: collection.name
+    const collections = await webflow.collections.list(websiteId);
+    return collections.collections!.map(collection => ({
+      id: collection.id,
+      name: collection.displayName
     }));
   } catch (error) {
     console.error('Error fetching collections:', error);
