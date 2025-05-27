@@ -1,8 +1,8 @@
 import { FormData, Website, Collection } from '../types';
-import Webflow from '@webflow/js';
+import { WebflowClient } from 'webflow-api';
 
 const API_URL = import.meta.env.VITE_WEBHOOK_URL;
-const webflow = new Webflow({ token: import.meta.env.VITE_WEBFLOW_API_KEY });
+const webflow = new WebflowClient({ token: import.meta.env.VITE_WEBFLOW_API_KEY });
 
 export const submitFormData = async (formData: FormData): Promise<Response> => {
   try {
