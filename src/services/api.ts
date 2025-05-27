@@ -26,7 +26,7 @@ export const submitFormData = async (formData: FormData): Promise<Response> => {
 
 export const fetchWebsites = async (): Promise<Website[]> => {
   try {
-    const response = await fetch(WEBFLOW_API_URL + "/api/sites", {
+    const response = await fetch(`${WEBFLOW_API_URL}/api/sites`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -34,24 +34,29 @@ export const fetchWebsites = async (): Promise<Website[]> => {
     });
     
     if (!response.ok) {
-      throw new Error('API request failed');
+      throw new Error(`API request failed with status ${response.status}`);
     }
     
     const data = await response.json();
-    // Assuming the API returns an array of websites with id and name
+    
+    if (!Array.isArray(data)) {
+      console.error('Unexpected response format:', data);
+      return [];
+    }
+    
     return data.map((site: any) => ({
-      id: site.id,
-      name: site.displayName,
-    })) as Website[];
+      id: site.id || undefined,
+      name: site.displayName || site.name || undefined,
+    }));
   } catch (error) {
     console.error('Error fetching websites:', error);
-    throw error;
+    return [];
   }
 };
 
 export const fetchCollections = async (websiteId: string): Promise<Collection[]> => {
-    try {
-    const response = await fetch(WEBFLOW_API_URL + "/api/collections?siteId" + websiteId, {
+  try {
+    const response = await fetch(`${WEBFLOW_API_URL}/api/collections?siteId=${websiteId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -59,17 +64,22 @@ export const fetchCollections = async (websiteId: string): Promise<Collection[]>
     });
     
     if (!response.ok) {
-      throw new Error('API request failed');
+      throw new Error(`API request failed with status ${response.status}`);
     }
 
     const data = await response.json();
-    // Assuming the API returns an array of websites with id and name
-    return data.map((site: any) => ({
-      id: site.id,
-      name: site.displayName,
-    })) as Collection[];
+    
+    if (!Array.isArray(data)) {
+      console.error('Unexpected response format:', data);
+      return [];
+    }
+
+    return data.map((collection: any) => ({
+      id: collection.id || undefined,
+      name: collection.displayName || collection.name || undefined,
+    }));
   } catch (error) {
-    console.error('Error fetching websites:', error);
-    throw error;
+    console.error('Error fetching collections:', error);
+    return [];
   }
 };
