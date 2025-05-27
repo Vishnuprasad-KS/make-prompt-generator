@@ -1,8 +1,7 @@
 import { FormData, Website, Collection } from '../types';
-import { WebflowClient } from 'webflow-api';
 
 const API_URL = import.meta.env.VITE_WEBHOOK_URL;
-const webflow = new WebflowClient({ accessToken: import.meta.env.VITE_WEBFLOW_API_KEY });
+const WEBFLOW_API_URL = "http://localhost:5000";
 
 export const submitFormData = async (formData: FormData): Promise<Response> => {
   try {
@@ -27,12 +26,23 @@ export const submitFormData = async (formData: FormData): Promise<Response> => {
 
 export const fetchWebsites = async (): Promise<Website[]> => {
   try {
-    const sites = await webflow.sites.list();
-    console.log(sites)
-    return sites.sites!.map(site => ({
+    const response = await fetch(WEBFLOW_API_URL + "/api/sites", {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error('API request failed');
+    }
+    
+    const data = await response.json();
+    // Assuming the API returns an array of websites with id and name
+    return data.map((site: any) => ({
       id: site.id,
-      name: site.displayName
-    }));
+      name: site.displayName,
+    })) as Website[];
   } catch (error) {
     console.error('Error fetching websites:', error);
     throw error;
@@ -40,14 +50,26 @@ export const fetchWebsites = async (): Promise<Website[]> => {
 };
 
 export const fetchCollections = async (websiteId: string): Promise<Collection[]> => {
-  try {
-    const collections = await webflow.collections.list(websiteId);
-    return collections.collections!.map(collection => ({
-      id: collection.id,
-      name: collection.displayName
-    }));
+    try {
+    const response = await fetch(WEBFLOW_API_URL + "/api/collections?siteId" + websiteId, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error('API request failed');
+    }
+
+    const data = await response.json();
+    // Assuming the API returns an array of websites with id and name
+    return data.map((site: any) => ({
+      id: site.id,
+      name: site.displayName,
+    })) as Collection[];
   } catch (error) {
-    console.error('Error fetching collections:', error);
+    console.error('Error fetching websites:', error);
     throw error;
   }
 };
