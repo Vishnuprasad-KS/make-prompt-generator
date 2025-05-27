@@ -1,7 +1,8 @@
 import { FormData, Website, Collection } from '../types';
+import Webflow from '@webflow/js';
 
 const API_URL = import.meta.env.VITE_WEBHOOK_URL;
-const WEBFLOW_API_URL = import.meta.env.VITE_WEBFLOW_API_URL;
+const webflow = new Webflow({ token: import.meta.env.VITE_WEBFLOW_API_KEY });
 
 export const submitFormData = async (formData: FormData): Promise<Response> => {
   try {
@@ -26,17 +27,11 @@ export const submitFormData = async (formData: FormData): Promise<Response> => {
 
 export const fetchWebsites = async (): Promise<Website[]> => {
   try {
-    const response = await fetch(`${WEBFLOW_API_URL}/sites`, {
-      headers: {
-        'Authorization': `Bearer ${import.meta.env.VITE_WEBFLOW_API_KEY}`,
-      },
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch websites');
-    }
-    
-    return await response.json();
+    const sites = await webflow.sites();
+    return sites.map(site => ({
+      id: site._id,
+      name: site.name
+    }));
   } catch (error) {
     console.error('Error fetching websites:', error);
     throw error;
@@ -45,17 +40,11 @@ export const fetchWebsites = async (): Promise<Website[]> => {
 
 export const fetchCollections = async (websiteId: string): Promise<Collection[]> => {
   try {
-    const response = await fetch(`${WEBFLOW_API_URL}/sites/${websiteId}/collections`, {
-      headers: {
-        'Authorization': `Bearer ${import.meta.env.VITE_WEBFLOW_API_KEY}`,
-      },
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch collections');
-    }
-    
-    return await response.json();
+    const collections = await webflow.collections({ siteId: websiteId });
+    return collections.map(collection => ({
+      id: collection._id,
+      name: collection.name
+    }));
   } catch (error) {
     console.error('Error fetching collections:', error);
     throw error;
