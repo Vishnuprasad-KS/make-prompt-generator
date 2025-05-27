@@ -22,11 +22,11 @@ export interface NotificationProps {
 }
 
 export interface Website {
-  id: string;
-  name: string;
+  id: string | undefined;
+  name: string | undefined;
 }
 
 export interface Collection {
-  id: string;
-  name: string;
+  id: string | undefined;
+  name: string | undefined;
 }
