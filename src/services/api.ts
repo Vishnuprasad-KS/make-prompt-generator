@@ -3,6 +3,20 @@ import { FormData, Website, Collection } from '../types';
 const API_URL = import.meta.env.VITE_WEBHOOK_URL;
 const WEBFLOW_API_URL = "http://localhost:8000";
 
+const handleResponse = async (response: Response) => {
+  if (response.status === 401) {
+    // Redirect to auth endpoint
+    window.location.href = `${WEBFLOW_API_URL}/auth`;
+    throw new Error('Authentication required');
+  }
+  
+  if (!response.ok) {
+    throw new Error(`API request failed with status ${response.status}`);
+  }
+  
+  return response;
+};
+
 export const submitFormData = async (formData: FormData): Promise<Response> => {
   try {
     const response = await fetch(API_URL, {
@@ -13,10 +27,7 @@ export const submitFormData = async (formData: FormData): Promise<Response> => {
       body: JSON.stringify(formData),
     });
     
-    if (!response.ok) {
-      throw new Error('API request failed');
-    }
-    
+    await handleResponse(response);
     return response;
   } catch (error) {
     console.error('Error submitting form data:', error);
@@ -33,14 +44,11 @@ export const fetchWebsites = async (): Promise<Website[]> => {
       },
     });
     
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
-    }
+    await handleResponse(response);
     
     const data = await response.json();
-    console.log('Raw API response:', data); // Debug log
+    console.log('Raw API response:', data);
     
-    // Handle different response formats
     const sites = Array.isArray(data) ? data : data.sites || [];
     
     if (!Array.isArray(sites)) {
@@ -49,7 +57,6 @@ export const fetchWebsites = async (): Promise<Website[]> => {
     }
     
     return sites.map((site: any) => {
-      // Debug log for each site object
       console.log('Processing site:', site);
       
       return {
@@ -72,14 +79,11 @@ export const fetchCollections = async (websiteId: string): Promise<Collection[]>
       },
     });
     
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
-    }
+    await handleResponse(response);
 
     const data = await response.json();
-    console.log('Raw collections response:', data); // Debug log
+    console.log('Raw collections response:', data);
     
-    // Handle different response formats
     const collections = Array.isArray(data) ? data : data.collections || [];
     
     if (!Array.isArray(collections)) {
@@ -88,7 +92,6 @@ export const fetchCollections = async (websiteId: string): Promise<Collection[]>
     }
 
     return collections.map((collection: any) => {
-      // Debug log for each collection object
       console.log('Processing collection:', collection);
       
       return {
