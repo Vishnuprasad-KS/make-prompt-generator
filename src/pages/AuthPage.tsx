@@ -4,7 +4,7 @@ import { LogIn } from 'lucide-react';
 const AuthPage: React.FC = () => {
   const handleAuth = () => {
     // Redirect to the backend's auth initiation endpoint
-    window.location.href = 'http://localhost:8000/auth/webflow';
+    window.location.href = 'http://localhost:8000/auth';
   };
 
   return (
