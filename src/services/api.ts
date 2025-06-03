@@ -1,7 +1,7 @@
 import { FormData, Website, Collection } from '../types';
 
 const API_URL = import.meta.env.VITE_WEBHOOK_URL;
-const WEBFLOW_API_URL = "http://localhost:5000";
+const WEBFLOW_API_URL = "http://localhost:8000";
 
 export const submitFormData = async (formData: FormData): Promise<Response> => {
   try {
