@@ -16,7 +16,9 @@ const PromptForm: React.FC = () => {
     model: '',
     otherDetails: '',
     selectedWebsite: '',
+    selectedWebsiteName: '',
     selectedCollection: '',
+    selectedCollectionName: '',
     category: '',
   });
   
@@ -57,15 +59,23 @@ const PromptForm: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleWebsiteSelect = (websiteId: string) => {
-    setFormData(prev => ({ ...prev, selectedWebsite: websiteId }));
+  const handleWebsiteSelect = (websiteId: string, websiteName: string) => {
+    setFormData(prev => ({ 
+      ...prev, 
+      selectedWebsite: websiteId,
+      selectedWebsiteName: websiteName
+    }));
     if (errors.selectedWebsite) {
       setErrors(prev => ({ ...prev, selectedWebsite: undefined }));
     }
   };
 
-  const handleCollectionSelect = (collectionId: string) => {
-    setFormData(prev => ({ ...prev, selectedCollection: collectionId }));
+  const handleCollectionSelect = (collectionId: string, collectionName: string) => {
+    setFormData(prev => ({ 
+      ...prev, 
+      selectedCollection: collectionId,
+      selectedCollectionName: collectionName
+    }));
     if (errors.selectedCollection) {
       setErrors(prev => ({ ...prev, selectedCollection: undefined }));
     }
@@ -112,7 +122,9 @@ const PromptForm: React.FC = () => {
         model: '',
         otherDetails: '',
         selectedWebsite: '',
+        selectedWebsiteName: '',
         selectedCollection: '',
+        selectedCollectionName: '',
         category: '',
       });
       setStep(1);
@@ -242,5 +254,3 @@ const PromptForm: React.FC = () => {
     </div>
   );
 };
-
-export default PromptForm;

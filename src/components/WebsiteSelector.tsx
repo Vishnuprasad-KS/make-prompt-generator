@@ -4,7 +4,7 @@ import { fetchWebsites } from '../services/api';
 import { ChevronDown } from 'lucide-react';
 
 interface WebsiteSelectorProps {
-  onSelect: (websiteId: string) => void;
+  onSelect: (websiteId: string, websiteName: string) => void;
   error?: string;
 }
 
@@ -30,8 +30,9 @@ const WebsiteSelector: React.FC<WebsiteSelectorProps> = ({ onSelect, error }) =>
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const websiteId = e.target.value;
+    const website = websites.find(w => w.id === websiteId);
     setSelectedWebsite(websiteId);
-    onSelect(websiteId);
+    onSelect(websiteId, website?.name || '');
   };
 
   if (loading) {
@@ -68,5 +69,3 @@ const WebsiteSelector: React.FC<WebsiteSelectorProps> = ({ onSelect, error }) =>
     </div>
   );
 };
-
-export default WebsiteSelector;

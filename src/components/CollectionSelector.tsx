@@ -5,7 +5,7 @@ import { Search } from 'lucide-react';
 
 interface CollectionSelectorProps {
   websiteId: string;
-  onSelect: (collectionId: string) => void;
+  onSelect: (collectionId: string, collectionName: string) => void;
   error?: string;
 }
 
@@ -38,12 +38,13 @@ const CollectionSelector: React.FC<CollectionSelectorProps> = ({
   }, [websiteId]);
 
   const filteredCollections = collections.filter(collection =>
-    collection.name.toLowerCase().includes(searchTerm.toLowerCase())
+    collection.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSelect = (collectionId: string) => {
+    const collection = collections.find(c => c.id === collectionId);
     setSelectedCollection(collectionId);
-    onSelect(collectionId);
+    onSelect(collectionId, collection?.name || '');
   };
 
   if (loading) {
@@ -74,8 +75,8 @@ const CollectionSelector: React.FC<CollectionSelectorProps> = ({
         {filteredCollections.map((collection) => (
           <button
             key={collection.id}
-            onClick={() => handleSelect(collection.id)}
-            className={`w-full text-left px-4 py-2 hover:bg-indigo-50 transition-colors duration-150
+            onClick={() => handleSelect(collection.id || '')}
+            className={`w-full text-left px-4 py-2 hover:bg-indigo-50 transition-colors
               ${selectedCollection === collection.id ? 'bg-indigo-100' : ''}`}
           >
             {collection.name}
@@ -91,5 +92,3 @@ const CollectionSelector: React.FC<CollectionSelectorProps> = ({
     </div>
   );
 };
-
-export default CollectionSelector;

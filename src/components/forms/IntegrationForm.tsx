@@ -23,10 +23,10 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({
       <div className="mb-6 space-y-4">
         <div className="bg-gray-50 p-4 rounded-md">
           <p className="text-sm text-gray-600">
-            <strong>Selected Website:</strong> {formData.selectedWebsite}
+            <strong>Selected Website:</strong> {formData.selectedWebsiteName}
           </p>
           <p className="text-sm text-gray-600">
-            <strong>Selected Collection:</strong> {formData.selectedCollection}
+            <strong>Selected Collection:</strong> {formData.selectedCollectionName}
           </p>
         </div>
       </div>

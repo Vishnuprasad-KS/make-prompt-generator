@@ -4,7 +4,9 @@ export interface FormData {
   model: string;
   otherDetails: string;
   selectedWebsite: string;
+  selectedWebsiteName: string;
   selectedCollection: string;
+  selectedCollectionName: string;
   category?: string;
 }
 
