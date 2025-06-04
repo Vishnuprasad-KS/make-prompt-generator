@@ -69,3 +69,5 @@ const WebsiteSelector: React.FC<WebsiteSelectorProps> = ({ onSelect, error }) =>
     </div>
   );
 };
+
+export default WebsiteSelector
