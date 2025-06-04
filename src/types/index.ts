@@ -5,6 +5,7 @@ export interface FormData {
   otherDetails: string;
   selectedWebsite: string;
   selectedCollection: string;
+  category?: string;
 }
 
 export interface FormErrors {
@@ -12,6 +13,7 @@ export interface FormErrors {
   model?: string;
   selectedWebsite?: string;
   selectedCollection?: string;
+  category?: string;
 }
 
 export type NotificationType = 'success' | 'error' | null;

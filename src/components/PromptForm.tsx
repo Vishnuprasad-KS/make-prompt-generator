@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { FormData, FormErrors, NotificationType } from '../types';
 import { submitFormData } from '../services/api';
-import FormField from './FormField';
 import Notification from './Notification';
 import WebsiteSelector from './WebsiteSelector';
 import CollectionSelector from './CollectionSelector';
-import { Send, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import BlogForm from './forms/BlogForm';
+import IntegrationForm from './forms/IntegrationForm';
 
 const PromptForm: React.FC = () => {
   const [step, setStep] = useState(1);
@@ -16,6 +17,7 @@ const PromptForm: React.FC = () => {
     otherDetails: '',
     selectedWebsite: '',
     selectedCollection: '',
+    category: '',
   });
   
   const [errors, setErrors] = useState<FormErrors>({});
@@ -45,6 +47,9 @@ const PromptForm: React.FC = () => {
       }
       if (!formData.model.trim()) {
         newErrors.model = 'AI Model is required';
+      }
+      if (formData.selectedCollection === 'blog' && !formData.category?.trim()) {
+        newErrors.category = 'Category is required for blog posts';
       }
     }
     
@@ -108,6 +113,7 @@ const PromptForm: React.FC = () => {
         otherDetails: '',
         selectedWebsite: '',
         selectedCollection: '',
+        category: '',
       });
       setStep(1);
     } catch (error) {
@@ -175,88 +181,22 @@ const PromptForm: React.FC = () => {
         );
       
       case 3:
-        return (
-          <>
-            <div className="mb-6 space-y-4">
-              <div className="bg-gray-50 p-4 rounded-md">
-                <p className="text-sm text-gray-600">
-                  <strong>Selected Website:</strong> {formData.selectedWebsite}
-                </p>
-                <p className="text-sm text-gray-600">
-                  <strong>Selected Collection:</strong> {formData.selectedCollection}
-                </p>
-              </div>
-            </div>
-            
-            <FormField
-              label="Prompt"
-              name="prompt"
-              type="textarea"
-              value={formData.prompt}
-              onChange={handleChange}
-              error={errors.prompt}
-              required
-              placeholder="Enter your prompt here..."
-            />
-            
-            <FormField
-              label="Keywords"
-              name="keywords"
-              value={formData.keywords}
-              onChange={handleChange}
-              placeholder="Enter comma separated keywords..."
-            />
-            
-            <FormField
-              label="AI Model"
-              name="model"
-              value={formData.model}
-              onChange={handleChange}
-              error={errors.model}
-              required
-              placeholder="e.g., GPT-4, Claude, etc."
-            />
-            
-            <FormField
-              label="Other Details"
-              name="otherDetails"
-              value={formData.otherDetails}
-              onChange={handleChange}
-              placeholder="Enter any additional details..."
-            />
-            
-            <div className="flex justify-between mt-8">
-              <button
-                type="button"
-                onClick={handleBack}
-                className="px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
-              >
-                Back
-              </button>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className={`flex items-center px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors ${
-                  isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
-                }`}
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white\" xmlns="http://www.w3.org/2000/svg\" fill="none\" viewBox="0 0 24 24">
-                      <circle className="opacity-25\" cx="12\" cy="12\" r="10\" stroke="currentColor\" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Processing...
-                  </span>
-                ) : (
-                  <span className="flex items-center">
-                    <Send className="mr-2 h-5 w-5" />
-                    Submit Prompt
-                  </span>
-                )}
-              </button>
-            </div>
-          </>
+        return formData.selectedCollection === 'blog' ? (
+          <BlogForm
+            formData={formData}
+            errors={errors}
+            handleChange={handleChange}
+            handleBack={handleBack}
+            isSubmitting={isSubmitting}
+          />
+        ) : (
+          <IntegrationForm
+            formData={formData}
+            errors={errors}
+            handleChange={handleChange}
+            handleBack={handleBack}
+            isSubmitting={isSubmitting}
+          />
         );
       
       default:
