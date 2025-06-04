@@ -254,3 +254,5 @@ const PromptForm: React.FC = () => {
     </div>
   );
 };
+
+export default PromptForm

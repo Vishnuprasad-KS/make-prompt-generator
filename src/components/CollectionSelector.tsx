@@ -92,3 +92,5 @@ const CollectionSelector: React.FC<CollectionSelectorProps> = ({
     </div>
   );
 };
+
+export default CollectionSelector
