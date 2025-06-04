@@ -72,7 +72,7 @@ export const fetchWebsites = async (): Promise<Website[]> => {
 
 export const fetchCollections = async (websiteId: string): Promise<Collection[]> => {
   try {
-    const response = await fetch(`${WEBFLOW_API_URL}/api/collections?siteId=${websiteId}`, {
+    const response = await fetch(`${WEBFLOW_API_URL}/api/collections/${websiteId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
