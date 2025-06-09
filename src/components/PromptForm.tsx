@@ -50,7 +50,7 @@ const PromptForm: React.FC = () => {
       if (!formData.model.trim()) {
         newErrors.model = 'AI Model is required';
       }
-      if (formData.selectedCollection === 'blog' && !formData.category?.trim()) {
+      if (formData.selectedCollection === '66a345b2baa543bc5924b256' && !formData.category?.trim()) {
         newErrors.category = 'Category is required for blog posts';
       }
     }
@@ -193,7 +193,7 @@ const PromptForm: React.FC = () => {
         );
       
       case 3:
-        return formData.selectedCollection === 'blog' ? (
+        return formData.selectedCollection === '66a345b2baa543bc5924b256' ? (
           <BlogForm
             formData={formData}
             errors={errors}

@@ -1,7 +1,7 @@
 import { FormData, Website, Collection } from '../types';
 
 const API_URL = import.meta.env.VITE_WEBHOOK_URL;
-const WEBFLOW_API_URL = "http://localhost:8000";
+const WEBFLOW_API_URL = import.meta.env.VITE_API_URL;
 
 const handleResponse = async (response: Response) => {
   if (response.status === 401) {
