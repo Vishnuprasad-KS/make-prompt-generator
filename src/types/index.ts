@@ -34,3 +34,21 @@ export interface Collection {
   id: string | undefined;
   name: string | undefined;
 }
+
+export interface ModelDeployment {
+  id: string;
+  model: string;
+  status: string;
+  scale_settings: {
+    scale_type: string;
+  };
+  owner: string;
+  created_at: number;
+  updated_at: number;
+  object: string;
+}
+
+export interface ModelDeploymentsResponse {
+  data: ModelDeployment[];
+  object: string;
+}

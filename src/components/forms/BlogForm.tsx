@@ -1,12 +1,13 @@
 import React from 'react';
 import { FormData, FormErrors } from '../../types';
 import FormField from '../FormField';
+import ModelSelector from '../ModelSelector';
 import { Send } from 'lucide-react';
 
 interface BlogFormProps {
   formData: FormData;
   errors: FormErrors;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   handleBack: () => void;
   isSubmitting: boolean;
 }
@@ -59,14 +60,11 @@ const BlogForm: React.FC<BlogFormProps> = ({
         placeholder="Enter comma separated keywords..."
       />
       
-      <FormField
-        label="AI Model"
-        name="model"
+      <ModelSelector
         value={formData.model}
         onChange={handleChange}
         error={errors.model}
         required
-        placeholder="e.g., GPT-4, Claude, etc."
       />
       
       <FormField

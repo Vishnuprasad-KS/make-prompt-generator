@@ -1,4 +1,4 @@
-import { FormData, Website, Collection } from '../types';
+import { FormData, Website, Collection, ModelDeploymentsResponse } from '../types';
 
 const API_URL = import.meta.env.VITE_WEBHOOK_URL;
 const WEBFLOW_API_URL = import.meta.env.VITE_API_URL;
@@ -102,5 +102,26 @@ export const fetchCollections = async (websiteId: string): Promise<Collection[]>
   } catch (error) {
     console.error('Error fetching collections:', error);
     return [];
+  }
+};
+
+export const fetchModelDeployments = async (): Promise<ModelDeploymentsResponse> => {
+  try {
+    const response = await fetch(`${WEBFLOW_API_URL}/azure/model-deployments`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    await handleResponse(response);
+    
+    const data = await response.json();
+    console.log('Raw model deployments response:', data);
+    
+    return data;
+  } catch (error) {
+    console.error('Error fetching model deployments:', error);
+    return { data: [], object: 'list' };
   }
 };
