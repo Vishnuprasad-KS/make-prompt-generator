@@ -2,7 +2,7 @@ import React from 'react';
 import { FormData, FormErrors } from '../../types';
 import FormField from '../FormField';
 import ModelSelector from '../ModelSelector';
-import { Send } from 'lucide-react';
+import { Send, Info } from 'lucide-react';
 
 interface IntegrationFormProps {
   formData: FormData;
@@ -32,16 +32,33 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({
         </div>
       </div>
       
-      <FormField
-        label="Prompt"
-        name="prompt"
-        type="textarea"
-        value={formData.prompt}
-        onChange={handleChange}
-        error={errors.prompt}
-        required
-        placeholder="Enter your prompt here..."
-      />
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Prompt <span className="text-red-500">*</span>
+        </label>
+        <div className="mb-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
+          <div className="flex items-start">
+            <Info className="h-4 w-4 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
+            <p className="text-sm text-blue-700">
+              Please customize this template with your specific requirements. Replace [PURPOSE] and other placeholders with your actual content needs.
+            </p>
+          </div>
+        </div>
+        <textarea
+          name="prompt"
+          value={formData.prompt}
+          onChange={handleChange}
+          placeholder="Enter your prompt here..."
+          rows={5}
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 ${
+            errors.prompt ? 'border-red-300 bg-red-50' : 'border-gray-300'
+          }`}
+          required
+        />
+        {errors.prompt && (
+          <p className="mt-1 text-sm text-red-600 animate-fadeIn">{errors.prompt}</p>
+        )}
+      </div>
       
       <FormField
         label="Keywords"
