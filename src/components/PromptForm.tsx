@@ -7,21 +7,10 @@ import CollectionSelector from './CollectionSelector';
 import { ArrowRight } from 'lucide-react';
 import BlogForm from './forms/BlogForm';
 import IntegrationForm from './forms/IntegrationForm';
+import { getPresetPrompt } from '../constants/presetPrompts';
 
 const PromptForm: React.FC = () => {
   const [step, setStep] = useState(1);
-  
-  // Define preset prompts for different collection types
-  const getPresetPrompt = (collectionId: string): string => {
-    if (collectionId === '66a345b2baa543bc5924b256') {
-      // Blog collection preset
-      return "Write a comprehensive blog post about [TOPIC]. The post should be engaging, informative, and optimized for SEO. Include relevant examples, actionable insights, and a compelling conclusion that encourages reader engagement.";
-    } else {
-      // Integration/default preset
-      return "Create content for [PURPOSE] that is professional, clear, and aligned with our brand voice. Ensure the content is well-structured and provides value to our target audience.";
-    }
-  };
-
   const [formData, setFormData] = useState<FormData>({
     prompt: '',
     keywords: '',
@@ -91,18 +80,18 @@ const PromptForm: React.FC = () => {
   };
 
   const handleCollectionSelect = (collectionId: string, collectionName: string) => {
-    // Set the preset prompt based on collection selection
-    const presetPrompt = getPresetPrompt(collectionId);
+    // Get the preset prompt based on collection selection
+    const presetPromptData = getPresetPrompt(collectionId);
     
     setFormData(prev => ({ 
       ...prev, 
       selectedCollection: collectionId,
       selectedCollectionName: collectionName,
-      prompt: presetPrompt
+      prompt: presetPromptData.template
     }));
     
     // Store the original preset prompt for validation
-    setOriginalPrompt(presetPrompt);
+    setOriginalPrompt(presetPromptData.template);
     
     if (errors.selectedCollection) {
       setErrors(prev => ({ ...prev, selectedCollection: undefined }));
