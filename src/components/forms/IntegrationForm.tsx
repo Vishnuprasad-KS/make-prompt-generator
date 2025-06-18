@@ -2,7 +2,9 @@ import React from 'react';
 import { FormData, FormErrors } from '../../types';
 import FormField from '../FormField';
 import ModelSelector from '../ModelSelector';
+import ChatInterface from '../ChatInterface';
 import { Send, Info } from 'lucide-react';
+import { getPresetPrompt } from '../../constants/presetPrompts';
 
 interface IntegrationFormProps {
   formData: FormData;
@@ -19,6 +21,21 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({
   handleBack,
   isSubmitting,
 }) => {
+  const presetPrompt = getPresetPrompt(formData.selectedCollection);
+  const chatWebhookUrl = import.meta.env.VITE_CHAT_WEBHOOK_URL || '';
+
+  const handleChatComplete = (finalPrompt: string) => {
+    // Update the form data with the generated prompt
+    const syntheticEvent = {
+      target: {
+        name: 'prompt',
+        value: finalPrompt
+      }
+    } as React.ChangeEvent<HTMLTextAreaElement>;
+    
+    handleChange(syntheticEvent);
+  };
+
   return (
     <>
       <div className="mb-6 space-y-4">
@@ -34,27 +51,34 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({
       
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Prompt <span className="text-red-500">*</span>
+          AI Prompt Assistant <span className="text-red-500">*</span>
         </label>
-        <div className="mb-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
+        <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-md">
           <div className="flex items-start">
             <Info className="h-4 w-4 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
             <p className="text-sm text-blue-700">
-              Please customize this template with your specific requirements. Replace [PURPOSE] and other placeholders with your actual content needs.
+              Chat with our AI assistant to create a tailored prompt for your content. 
+              The assistant will help you customize the template based on your specific requirements.
             </p>
           </div>
         </div>
+        
+        <ChatInterface
+          webhookUrl={chatWebhookUrl}
+          initialMessage={presetPrompt.template}
+          onChatComplete={handleChatComplete}
+          className="mb-4"
+        />
+        
+        {/* Hidden textarea to store the final prompt */}
         <textarea
           name="prompt"
           value={formData.prompt}
           onChange={handleChange}
-          placeholder="Enter your prompt here..."
-          rows={5}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 ${
-            errors.prompt ? 'border-red-300 bg-red-50' : 'border-gray-300'
-          }`}
+          className="hidden"
           required
         />
+        
         {errors.prompt && (
           <p className="mt-1 text-sm text-red-600 animate-fadeIn">{errors.prompt}</p>
         )}
@@ -93,9 +117,9 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({
         </button>
         <button
           type="submit"
-          disabled={isSubmitting}
-          className={`flex items-center px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors ${
-            isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+          disabled={isSubmitting || !formData.prompt}
+          className={`flex items-center px-6 py-2 bg-indigo-600 text-white rounded-colors ${
+            isSubmitting || !formData.prompt ? 'opacity-70 cursor-not-allowed' : ''
           }`}
         >
           {isSubmitting ? (

@@ -23,7 +23,6 @@ const PromptForm: React.FC = () => {
     category: '',
   });
   
-  const [originalPrompt, setOriginalPrompt] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notification, setNotification] = useState<{
@@ -46,14 +45,8 @@ const PromptForm: React.FC = () => {
     }
     
     if (currentStep === 3) {
-      // Check if prompt has been modified from the original preset
-      const promptTrimmed = formData.prompt.trim();
-      const originalTrimmed = originalPrompt.trim();
-      
-      if (!promptTrimmed) {
-        newErrors.prompt = 'Prompt is required';
-      } else if (promptTrimmed === originalTrimmed) {
-        newErrors.prompt = 'Please customize the prompt template with your specific requirements';
+      if (!formData.prompt.trim()) {
+        newErrors.prompt = 'Please use the chat interface to generate a prompt';
       }
       
       if (!formData.model.trim()) {
@@ -87,11 +80,8 @@ const PromptForm: React.FC = () => {
       ...prev, 
       selectedCollection: collectionId,
       selectedCollectionName: collectionName,
-      prompt: presetPromptData.template
+      prompt: '' // Reset prompt when collection changes
     }));
-    
-    // Store the original preset prompt for validation
-    setOriginalPrompt(presetPromptData.template);
     
     if (errors.selectedCollection) {
       setErrors(prev => ({ ...prev, selectedCollection: undefined }));
@@ -144,7 +134,6 @@ const PromptForm: React.FC = () => {
         selectedCollectionName: '',
         category: '',
       });
-      setOriginalPrompt('');
       setStep(1);
     } catch (error) {
       setNotification({
