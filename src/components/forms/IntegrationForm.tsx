@@ -118,7 +118,7 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({
         <button
           type="submit"
           disabled={isSubmitting || !formData.prompt}
-          className={`flex items-center px-6 py-2 bg-indigo-600 text-white rounded-colors ${
+          className={`flex items-center px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors ${
             isSubmitting || !formData.prompt ? 'opacity-70 cursor-not-allowed' : ''
           }`}
         >
